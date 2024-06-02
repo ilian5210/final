@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iLearn Login</title>
+  <link rel="shortcut icon" href="images/icon.ico">
+  <style>
+    body {
+      background-image: url('images/background.JPEG');
+      background-size: cover;
+      background-position: center;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 55%;
+      /*min-height: 10%; !* 將最小高度設置為 50% 視窗高度 *!*/
+      background-color: #fff;
+      /*padding: 10px;*/
+      border-radius: 10px;  /* Add border-radius for rounded corners */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+      box-sizing: border-box;
+    }
+    .right-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* 水平置中 */
+      align-items: center; /* 垂直置中 */
+
+      position: relative;
+      box-sizing: border-box;
+      width: 50%;
+    }
+
+
+    .left-container {
+      flex-direction: column;
+      padding: 20px;
+      position: relative;
+      box-sizing: border-box;
+      width: 50%;
+
+    }
+
+    .ilearn-logo {
+      position: relative;
+      justify-content: center;
+      left: 20px;
+      width: 30%;
+      height: auto;
+      /*margin-bottom: 60px;*/
+    }
+
+    .ilearn-logo img {
+      width: 300%;
+      height: auto;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .btn-primary{
+      background-color: #66000a;
+      border-color: #590009;
+      padding: .5rem 1rem;
+      font-size: 1.171875rem;
+      line-height: 1.5;
+      border-radius: .6rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, button {
+      flex: 1;  /* Remove this line if using box-sizing */
+      width: 50%;
+      padding: 10px;  /* Adjust padding as needed */
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 3px;
+      box-sizing: border-box;  /* Add this line */
+    }
+
+
+    input {
+      width: 100%;
+      height: 6vh;
+      padding: 8px; /* Adjust padding to account for border */
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 3px;
+    }
+
+    button {
+      color: white;
+      width: 100%;
+      padding: 10px; /* Adjust padding as needed */
+      border: none; /* Remove border for button */
+      border-radius: 5px;
+      margin: 3px;
+      cursor: pointer;
+    }
+
+
+
+
+    hr {
+      position: absolute;  /* 將位置設置為絕對位置 */
+      top: 10%;  /* 從容器的頂部開始 */
+      bottom: 0;  /* 垂直延伸至容器的底部 */
+      left: 50%;  /* 放置在容器的中心 */
+      height: 80%;  /* 垂直延伸整個視窗的高度 */
+      width: 1px;  /* 寬度為 2px */
+      border-width: 0;  /* 移除邊框 */
+      color: darkgray;  /* 設置顏色 */
+      background-color: darkgray;  /* 設置背景顏色 */
+      transform: translateX(-50%);  /* 將位置往左移一半，以使其位於容器的中心 */
+    }
+
+
+    .content{
+      flex-direction: column;
+      padding: 20px;
+      position: relative;
+      box-sizing: border-box;
+      /*width: 50%;*/
+    }
+
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="left-container">
+    <div class="ilearn-logo">
+      <img src="images/moodle.jpg" alt="iLearn Logo">
+    </div>
+    <form action="">
+      <div class="login-form-username form-group">
+        <input type="text" name="username" id="username" class="form-control form-control-lg" value="" placeholder="帳號" autocomplete="username">
+      </div>
+      <div class="login-form-password form-group" id="yui_3_17_2_1_1714996248943_28">
+        <input type="password" name="password" id="password" value="" class="form-control form-control-lg" placeholder="密碼" autocomplete="current-password">
+      </div>
+      <div class="login-form-submit form-group">
+        <button class="btn btn-primary btn-block btn-lg" type="submit" id="loginbtn">登入</button>
+      </div>
+    </form>
+    <p style="text-align: center;">
+      <a href="signup.html">沒有帳號？註冊</a>
+    </p>
+  </div>
+  <hr>
+  <div class="right-container">
+    <div class="content">
+
+      <strong style="font-size:large;text-align:left;">請使用NID帳號/密碼登入平台。</strong><br/>
+
+      <strong style="font-size:large;text-align:left;">欲變更NID密碼，請連結至
+        <a href="https://netid.fcu.edu.tw/" target="_blank" rel="noreferrer noopener">
+          <img src="images/nid.png" alt="NID" />
+        </a>
+      </strong>
+    </div>
+
+    </div>
+
+  </div>
+</div>
+<script>
+  document.getElementById('loginbtn').addEventListener('click', function(event) {
+    event.preventDefault();  // 防止表單提交
+  
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+  
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.name + '登入成功');
+      } else {
+        alert('登入失敗');
+      }
+    });
+  });
+</script>
+</body>
+</html>

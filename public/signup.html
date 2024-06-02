@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#studentId").blur(function(){
+            var studentId = $(this).val();
+            $.get("/studentName", {studentId: studentId}, function(data){
+                if (data.name) {
+                    alert(data.message);
+                    var password = prompt("請輸入註冊密碼");
+                    if (password) {
+                        $.get("/registerPassword", {studentId: studentId, password: password}, function(data) {
+                            if (data.message === "Password registered successfully") {
+                                alert("註冊成功");
+                                window.location.href = "index.html";
+                            } else {
+                                alert("註冊失敗");
+                            }
+                        });
+                    }
+                } else {
+                    $("#greeting").text(data.message);
+                }
+            });
+        });    // 隱藏 "greeting" 元素
+    $("#greeting").hide();
+
+    // 檢查localStorage中是否有學生名稱，如果有，則恢復
+    var storedName = localStorage.getItem('studentName');
+    if (storedName) {
+        $("#greeting").text(storedName);
+    }
+
+    // 當表單提交時，檢查 "greeting" 元素的文本
+    $("#confirmButton").click(function(e){
+    e.preventDefault();
+    var studentId = $("#studentId").val();
+    $.get("/studentName", {studentId: studentId}, function(data){
+        if (data.name) {
+            // 學生ID存在，繼續原來的操作
+            var greetingText = $("#greeting").text();
+            if (greetingText !== "No student found") {
+                // 新增密碼標籤和輸入欄位
+                $("#registerForm").append('<label for="password">密碼:</label>');
+                $("#registerForm").append('<input type="password" id="password" name="password" required>');
+                // 將密碼輸入欄位的 CSS 樣式設定為指定的樣式
+                $("#password").css({
+                    "width": "200px",
+                    "padding": "5px",
+                    "margin-bottom": "10px"
+                });
+                // 新增註冊按鈕
+                $("#registerForm").append('<input type="submit" id="registerButton" value="註冊">');
+                // 移除確認按鈕
+                $("#confirmButton").remove();
+            }
+        } else {
+            // 學生ID不存在，顯示錯誤消息
+            alert(data.message);
+        }
+    });
+});
+});
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>註冊畫面</title>
+</head>
+
+<body>
+<style>
+    .image-container {
+        position: relative;
+    }
+
+    .image-container img {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    .image-container img:first-child {
+        z-index: 1;
+    }
+
+    .image-container img:last-child {
+        z-index: 2;
+    }
+    #registerForm{
+        height: 100%;
+        position: relative;  /* Ensure position is not 'static' */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 3;  /* Set a higher z-index */
+        top: 120%;  /* Adjust this value as needed */
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"] {
+        width: 200px;
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+    input[type="submit"] {
+        width: 100px;
+        padding: 5px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #greeting {
+        margin: 10px;
+    }
+</style>
+    <div class="image-container">
+         <img src="images/bannerfull-01.jpg" alt="bannerfulllogo" width="100%">
+         <img src="images/bannerlogo.svg" alt="bannerlogo" width="100%">
+    </div>
+<form id="registerForm">
+    <label for="studentId">學號(大寫):</label>
+    <input type="text" id="studentId" name="studentId" required>
+
+    <input type="submit" id="confirmButton" value="確認">
+    <script src="register.js"></script>
+    <div id="greeting"></div>
+</form>
+
+
+</body>
+</html>
