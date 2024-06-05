@@ -20,7 +20,6 @@ app.use('/users', usersRouter);
 
 const db = new sqlite3.Database('./db/sqlite.db');
 
-// 移除未使用的 Student.find
 app.get('/studentName', function(req, res) {
     var studentId = req.query.studentId;
     db.get("SELECT name FROM Student WHERE s_id = ?", [studentId], function(err, row) {
